@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/widgets.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/slider_box_note.dart';
 
