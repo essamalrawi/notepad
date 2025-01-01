@@ -16,9 +16,11 @@ class SlidingText extends StatelessWidget {
       builder: (context, _) {
         return SlideTransition(
           position: slidingAnimation,
-          child: Text("Take Quick Notes",
-              textAlign: TextAlign.center,
-              style: AppStyle.styleRegular16(context)),
+          child: Text(
+            "Take Quick Notes",
+            textAlign: TextAlign.center,
+            style: AppStyle.styleRegular16(context),
+          ),
         );
       },
     );
