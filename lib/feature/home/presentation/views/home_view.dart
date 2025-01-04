@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:notepad/core/utils/app_router.dart';
 import 'package:notepad/core/widgets/adaptive_layout.dart';
+import 'package:notepad/feature/home/presentation/manager/add_note/add_note_cubit.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/home_view_desktop_layout.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/home_view_mobile_layout.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/home_view_table_layout.dart';
