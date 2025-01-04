@@ -1,106 +1,43 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:notepad/core/utils/app_style.dart';
-import 'package:notepad/feature/home/presentation/views/widgets/create_note_header.dart';
-import 'package:notepad/feature/home/presentation/views/widgets/custom_elevated_button.dart';
-import 'package:notepad/feature/home/presentation/views/widgets/note_text_field.dart';
-import 'package:notepad/feature/home/presentation/views/widgets/title_text_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:notepad/feature/home/presentation/manager/add_note/add_note_cubit.dart';
+import 'package:notepad/feature/home/presentation/views/widgets/add_note_form.dart';
 
 class CreateNoteViewMobileLayout extends StatelessWidget {
   const CreateNoteViewMobileLayout({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(right: 20, top: 21),
+    return Padding(
+      padding: const EdgeInsets.only(right: 20, top: 21),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: AddNoteForm()),
+          Expanded(
+              child: BlocConsumer<AddNoteCubit, AddNoteState>(
+            listener: (context, state) {
+              if (state is AddNoteFaluire) {
+                log("Failled ${state.error}");
+              }
+              if (state is AddNoteSuccess) {
+                log("Done added note");
+              }
+            },
+            builder: (context, state) {
+              return ModalProgressHUD(
+                  inAsyncCall: state is AddNoteLoading ? true : false,
+                  child: const AddNoteForm());
+            },
+          )),
           // const Expanded(
           //   child: SingleChildScrollView(
           //     child: AddNoteForm(),
           //   ),
           // ),
-        ],
-      ),
-    );
-  }
-}
-
-class AddNoteForm extends StatefulWidget {
-  const AddNoteForm({
-    super.key,
-  });
-
-  @override
-  State<AddNoteForm> createState() => _AddNoteFormState();
-}
-
-class _AddNoteFormState extends State<AddNoteForm> {
-  final GlobalKey<FormState> fromKey = GlobalKey();
-  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-  String? title, subTitle;
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: fromKey,
-      autovalidateMode: autovalidateMode,
-      child: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 4),
-            child: CreateNoteHeader(),
-          ),
-          const SizedBox(
-            height: 45,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TitleFormTextField(
-                      onSaved: (value) {
-                        title = value;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      '14/09/2023',
-                      style: AppStyle.styleRegular12(context),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    NoteTextFormField(onSaved: (value) {
-                      subTitle = value;
-                    }),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 17, top: 20),
-            child: SizedBox(
-                width: MediaQuery.sizeOf(context).width,
-                child: CustomElevatedButton(
-                  onPressed: () {
-                    if (fromKey.currentState!.validate()) {
-                      fromKey.currentState!.save();
-                    } else {
-                      autovalidateMode = AutovalidateMode.always;
-                      setState(() {});
-                    }
-                  },
-                )),
-          ),
         ],
       ),
     );
