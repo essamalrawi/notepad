@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:notepad/core/utils/app_style.dart';
 import 'package:notepad/feature/home/data/models/note_model.dart';
 import 'package:notepad/feature/home/presentation/manager/add_note/add_note_cubit.dart';
@@ -51,7 +52,9 @@ class _AddNoteFormState extends State<AddNoteForm> {
                       height: 12,
                     ),
                     Text(
-                      '14/09/2023',
+                      DateFormat('dd/MM/yyyy')
+                          .format(DateTime.now())
+                          .toString(),
                       style: AppStyle.styleRegular12(context),
                     ),
                     const SizedBox(
@@ -65,25 +68,31 @@ class _AddNoteFormState extends State<AddNoteForm> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 17, top: 20),
-            child: SizedBox(
-                width: MediaQuery.sizeOf(context).width,
-                child: CustomElevatedButton(
-                  onPressed: () {
-                    if (fromKey.currentState!.validate()) {
-                      fromKey.currentState!.save();
-                      var noteModel = NoteModel(
-                          title: title!,
-                          subTitle: subTitle!,
-                          date: DateTime.now().toString());
-                      BlocProvider.of<AddNoteCubit>(context).addNote(noteModel);
-                    } else {
-                      autovalidateMode = AutovalidateMode.always;
-                      setState(() {});
-                    }
-                  },
-                )),
+          BlocBuilder<AddNoteCubit, AddNoteState>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 20, bottom: 17, top: 20),
+                child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    child: CustomElevatedButton(
+                      isLoading: state is AddNoteLoading ? true : false,
+                      onPressed: () {
+                        if (fromKey.currentState!.validate()) {
+                          fromKey.currentState!.save();
+                          var noteModel = NoteModel(
+                              title: title!,
+                              subTitle: subTitle!,
+                              date: DateTime.now().toString());
+                          BlocProvider.of<AddNoteCubit>(context)
+                              .addNote(noteModel);
+                        } else {
+                          autovalidateMode = AutovalidateMode.always;
+                          setState(() {});
+                        }
+                      },
+                    )),
+              );
+            },
           ),
         ],
       ),

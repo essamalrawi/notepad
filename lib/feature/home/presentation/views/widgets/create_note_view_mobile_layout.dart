@@ -11,34 +11,35 @@ class CreateNoteViewMobileLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20, top: 21),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-              child: BlocConsumer<AddNoteCubit, AddNoteState>(
-            listener: (context, state) {
-              if (state is AddNoteFaluire) {
-                log("Failled ${state.error}");
-              }
-              if (state is AddNoteSuccess) {
-                log("Done added note");
-              }
-            },
-            builder: (context, state) {
-              return ModalProgressHUD(
-                  inAsyncCall: state is AddNoteLoading ? true : false,
-                  child: const AddNoteForm());
-            },
-          )),
-          // const Expanded(
-          //   child: SingleChildScrollView(
-          //     child: AddNoteForm(),
-          //   ),
-          // ),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+            child: BlocConsumer<AddNoteCubit, AddNoteState>(
+          listener: (context, state) {
+            if (state is AddNoteFaluire) {
+              log("Failled ${state.error}");
+            }
+            if (state is AddNoteSuccess) {
+              log("Done added note");
+            }
+          },
+          builder: (context, state) {
+            return AbsorbPointer(
+              absorbing: state is AddNoteLoading ? true : false,
+              child: const Padding(
+                padding: EdgeInsets.only(right: 20, top: 21),
+                child: AddNoteForm(),
+              ),
+            );
+          },
+        )),
+        // const Expanded(
+        //   child: SingleChildScrollView(
+        //     child: AddNoteForm(),
+        //   ),
+        // ),
+      ],
     );
   }
 }
