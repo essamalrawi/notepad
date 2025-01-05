@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -21,9 +23,13 @@ class AddNoteForm extends StatefulWidget {
 class _AddNoteFormState extends State<AddNoteForm> {
   final GlobalKey<FormState> fromKey = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  late bool isKeyboardOpen;
   String? title, subTitle;
   @override
   Widget build(BuildContext context) {
+    isKeyboardOpen =
+        MediaQuery.of(context).viewInsets.bottom > 0 ? true : false;
+
     return Form(
       key: fromKey,
       autovalidateMode: autovalidateMode,
@@ -38,7 +44,9 @@ class _AddNoteFormState extends State<AddNoteForm> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 20),
+              padding: const EdgeInsets.only(
+                left: 20,
+              ),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,26 +79,36 @@ class _AddNoteFormState extends State<AddNoteForm> {
           BlocBuilder<AddNoteCubit, AddNoteState>(
             builder: (context, state) {
               return Padding(
-                padding: const EdgeInsets.only(left: 20, bottom: 17, top: 20),
-                child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
-                    child: CustomElevatedButton(
-                      isLoading: state is AddNoteLoading ? true : false,
-                      onPressed: () {
-                        if (fromKey.currentState!.validate()) {
-                          fromKey.currentState!.save();
-                          var noteModel = NoteModel(
-                              title: title!,
-                              subTitle: subTitle!,
-                              date: DateTime.now().toString());
-                          BlocProvider.of<AddNoteCubit>(context)
-                              .addNote(noteModel);
-                        } else {
-                          autovalidateMode = AutovalidateMode.always;
-                          setState(() {});
-                        }
-                      },
-                    )),
+                padding: EdgeInsets.only(
+                  left: 20,
+                  top: isKeyboardOpen
+                      ? MediaQuery.of(context).viewInsets.bottom
+                      : 20,
+                  bottom: isKeyboardOpen ? 5 : 17,
+                ),
+
+                // Hide the button
+                child: MediaQuery.of(context).viewInsets.bottom != 0
+                    ? const SizedBox()
+                    : SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: CustomElevatedButton(
+                          isLoading: state is AddNoteLoading ? true : false,
+                          onPressed: () {
+                            if (fromKey.currentState!.validate()) {
+                              fromKey.currentState!.save();
+                              var noteModel = NoteModel(
+                                  title: title!,
+                                  subTitle: subTitle!,
+                                  date: DateTime.now().toString());
+                              BlocProvider.of<AddNoteCubit>(context)
+                                  .addNote(noteModel);
+                            } else {
+                              autovalidateMode = AutovalidateMode.always;
+                              setState(() {});
+                            }
+                          },
+                        )),
               );
             },
           ),

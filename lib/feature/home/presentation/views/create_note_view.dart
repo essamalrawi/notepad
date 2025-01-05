@@ -9,6 +9,7 @@ class CreateNoteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xffFFFFFF),
       body: SafeArea(
           child: BlocProvider(
