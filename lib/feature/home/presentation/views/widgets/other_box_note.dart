@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/core/utils/app_style.dart';
+import 'package:notepad/feature/home/data/models/note_model.dart';
 
 class OtherBoxNote extends StatelessWidget {
-  const OtherBoxNote({super.key, this.color});
+  const OtherBoxNote({super.key, this.color, required this.note});
   final Color? color;
+  final NoteModel note;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,13 +20,13 @@ class OtherBoxNote extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'sherlock holmes',
+              note.title,
               style: AppStyle.styleRegular14(context),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              'yesterday',
+              note.date,
               style: AppStyle.styleRegular12(context),
             ),
             const SizedBox(
@@ -32,7 +34,7 @@ class OtherBoxNote extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                'In summary, the sentence means the speaker was seriously affected by enteric fever, a common and dreaded disease during the time of British colonialism in India. The phrase "curse of our Indian possessions',
+                note.subTitle,
                 style: AppStyle.styleMedium16(context),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

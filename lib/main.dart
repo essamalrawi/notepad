@@ -5,6 +5,7 @@ import 'package:notepad/constants.dart';
 
 import 'package:notepad/core/utils/app_router.dart';
 import 'package:notepad/feature/home/data/models/note_model.dart';
+import 'package:notepad/feature/home/presentation/manager/notes/notes_cubit.dart';
 import 'package:notepad/simple_bloc_observer.dart';
 
 void main() async {
@@ -22,9 +23,12 @@ class Notepad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
+    return BlocProvider(
+      create: (context) => NotesCubit()..fetchAllNotes(),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router,
+      ),
     );
   }
 }

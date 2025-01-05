@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notepad/feature/home/data/models/note_model.dart';
+import 'package:notepad/feature/home/presentation/manager/notes/notes_cubit.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/other_box_note.dart';
 
 class BuildOtherBoxNote extends StatelessWidget {
@@ -10,14 +15,21 @@ class BuildOtherBoxNote extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: 6,
-        itemBuilder: (context, index) {
-          return OtherBoxNote(
-            color: colors[index % colors.length],
-          );
-        });
+    List<NoteModel> notes = BlocProvider.of<NotesCubit>(context).notes!;
+
+    return BlocBuilder<NotesCubit, NotesState>(
+      builder: (context, state) {
+        return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: notes.length,
+            itemBuilder: (context, index) {
+              return OtherBoxNote(
+                note: notes[index],
+                color: colors[index % colors.length],
+              );
+            });
+      },
+    );
   }
 }

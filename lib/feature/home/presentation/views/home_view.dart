@@ -14,25 +14,22 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NotesCubit(),
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            backgroundColor: const Color(0xff703410),
-            shape: const CircleBorder(),
-            child: IconButton(
-                onPressed: () {
-                  GoRouter.of(context).push(AppRouter.kCreateNoteView);
-                },
-                icon: SvgPicture.asset('assets/images/button.svg'))),
-        backgroundColor: const Color(0xffFFFFFF),
-        body: SafeArea(
-          child: AdaptiveLayout(
-            mobileLayout: (context) => const HomeViewMobileLayout(),
-            tabletLayout: (context) => const HomeViewTableLayout(),
-            desktopLayout: (context) => const HomeViewDesktopLayout(),
-          ),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: const Color(0xff703410),
+          shape: const CircleBorder(),
+          child: IconButton(
+              onPressed: () {
+                GoRouter.of(context).push(AppRouter.kCreateNoteView);
+              },
+              icon: SvgPicture.asset('assets/images/button.svg'))),
+      backgroundColor: const Color(0xffFFFFFF),
+      body: SafeArea(
+        child: AdaptiveLayout(
+          mobileLayout: (context) => const HomeViewMobileLayout(),
+          tabletLayout: (context) => const HomeViewTableLayout(),
+          desktopLayout: (context) => const HomeViewDesktopLayout(),
         ),
       ),
     );
