@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:notepad/core/utils/app_router.dart';
 import 'package:notepad/core/utils/app_style.dart';
 import 'package:notepad/feature/home/data/models/note_model.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/view_note_header.dart';
@@ -16,14 +20,20 @@ class ViewNoteModelMobileLayout extends StatelessWidget {
             note: note,
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 24, right: 24, top: 37),
-              child: SingleChildScrollView(
-                child: Align(
-                  alignment: AlignmentDirectional.topStart,
-                  child: Text(
-                    note.subTitle,
-                    style: AppStyle.styleRegular16(context),
+            child: GestureDetector(
+              onDoubleTap: () {
+                GoRouter.of(context)
+                    .replace(AppRouter.kCreateNoteView, extra: note);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 24, right: 24, top: 37),
+                child: SingleChildScrollView(
+                  child: Align(
+                    alignment: AlignmentDirectional.topStart,
+                    child: Text(
+                      note.subTitle,
+                      style: AppStyle.styleRegular16(context),
+                    ),
                   ),
                 ),
               ),

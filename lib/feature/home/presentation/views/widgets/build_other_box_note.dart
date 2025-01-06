@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notepad/feature/home/data/models/note_model.dart';
@@ -18,14 +16,15 @@ class BuildOtherBoxNote extends StatelessWidget {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
         List<NoteModel> notes = BlocProvider.of<NotesCubit>(context).notes!;
-
+        List<NoteModel> otherNotes =
+            notes.where((note) => note.isPinned == false).toList();
         return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: notes.length,
+            itemCount: otherNotes.length,
             itemBuilder: (context, index) {
               return OtherBoxNote(
-                note: notes[index],
+                note: otherNotes[index],
                 color: colors[index % colors.length],
               );
             });

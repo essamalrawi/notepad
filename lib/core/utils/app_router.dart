@@ -22,7 +22,12 @@ class AppRouter {
     ),
     GoRoute(
       path: kCreateNoteView,
-      builder: (context, state) => const CreateNoteView(),
+      builder: (context, state) {
+        final note = state.extra as NoteModel;
+        return CreateNoteView(
+          note: note,
+        );
+      },
     ),
     GoRoute(
       path: kNoteView,

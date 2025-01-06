@@ -61,7 +61,11 @@ class ViewNoteHeader extends StatelessWidget {
         Row(
           children: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  note.isPinned = true;
+                  note.save();
+                  BlocProvider.of<NotesCubit>(context).fetchAllNotes();
+                },
                 icon: const Icon(
                   FontAwesomeIcons.mapPin,
                   color: Colors.black,

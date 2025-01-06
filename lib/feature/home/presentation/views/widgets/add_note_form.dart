@@ -96,7 +96,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                           onPressed: () {
                             if (fromKey.currentState!.validate()) {
                               fromKey.currentState!.save();
-                              var noteModel = NoteModel(
+                              var noteModel = NoteModel(false,
                                   title: title!,
                                   subTitle: subTitle!,
                                   date: DateFormat('dd/MM/yyyy')
