@@ -11,25 +11,31 @@ class TitleFormTextField extends StatefulWidget {
 }
 
 class _TitleFormTextFieldState extends State<TitleFormTextField> {
-  late TextEditingController _titleController;
+  late TextEditingController _controller;
 
+  TextDirection _textDirection = TextDirection.ltr;
   @override
   void initState() {
     super.initState();
-
-    _titleController = TextEditingController(text: widget.note?.subTitle ?? '');
+    _controller = TextEditingController(text: widget.note?.subTitle ?? '');
+    _controller.addListener(_handleTextChange);
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
+    _controller.removeListener(_handleTextChange);
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: _titleController,
+      textAlign: _textDirection == TextDirection.rtl
+          ? TextAlign.right
+          : TextAlign.left,
+      textDirection: _textDirection,
+      controller: _controller,
       onSaved: widget.onSaved,
       validator: (value) {
         if (value?.isEmpty ?? true) {
@@ -46,5 +52,12 @@ class _TitleFormTextFieldState extends State<TitleFormTextField> {
         border: const OutlineInputBorder(borderSide: BorderSide.none),
       ),
     );
+  }
+
+  void _handleTextChange() {
+    final isRtl = RegExp(r'[\u0600-\u06FF]').hasMatch(_controller.text);
+    setState(() {
+      _textDirection = isRtl ? TextDirection.rtl : TextDirection.ltr;
+    });
   }
 }

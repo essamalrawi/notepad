@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:notepad/core/function/is_rtl.dart';
 import 'package:notepad/core/utils/app_style.dart';
 import 'package:notepad/feature/home/data/models/note_model.dart';
 import 'package:notepad/feature/home/presentation/manager/add_note/add_note_cubit.dart';
@@ -28,6 +29,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   late bool isKeyboardOpen;
   String? title, subTitle;
+
   @override
   Widget build(BuildContext context) {
     isKeyboardOpen =
@@ -111,7 +113,8 @@ class _AddNoteFormState extends State<AddNoteForm> {
                                 BlocProvider.of<NotesCubit>(context)
                                     .fetchAllNotes();
                               } else {
-                                var noteModel = NoteModel(false,
+                                var noteModel = NoteModel(
+                                    isRtlText(title!), false,
                                     title: title!,
                                     subTitle: subTitle!,
                                     date: DateFormat('dd/MM/yyyy')

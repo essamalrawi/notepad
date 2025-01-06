@@ -30,6 +30,8 @@ class ViewNoteModelMobileLayout extends StatelessWidget {
                   child: Align(
                     alignment: AlignmentDirectional.topStart,
                     child: Text(
+                      textAlign:
+                          note.RTL == true ? TextAlign.right : TextAlign.left,
                       note.subTitle,
                       style: AppStyle.styleRegular16(context),
                     ),

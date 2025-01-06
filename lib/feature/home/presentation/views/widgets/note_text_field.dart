@@ -13,27 +13,33 @@ class NoteTextFormField extends StatefulWidget {
 }
 
 class _NoteTextFormFieldState extends State<NoteTextFormField> {
-  late TextEditingController _contentController;
+  late TextEditingController _controller;
+
+  TextDirection _textDirection = TextDirection.ltr;
   @override
   void initState() {
     super.initState();
 
-    _contentController =
-        TextEditingController(text: widget.note?.subTitle ?? '');
+    _controller = TextEditingController(text: widget.note?.subTitle ?? '');
+    _controller.addListener(_handleTextChange);
   }
 
   @override
   void dispose() {
     // Clean up the controllers
-
-    _contentController.dispose();
+    _controller.removeListener(_handleTextChange);
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: _contentController,
+      textAlign: _textDirection == TextDirection.rtl
+          ? TextAlign.right
+          : TextAlign.left,
+      textDirection: _textDirection,
+      controller: _controller,
       onSaved: widget.onSaved,
       validator: (value) {
         if (value?.isEmpty ?? true) {
@@ -54,5 +60,12 @@ class _NoteTextFormFieldState extends State<NoteTextFormField> {
         border: const OutlineInputBorder(borderSide: BorderSide.none),
       ),
     );
+  }
+
+  void _handleTextChange() {
+    final isRtl = RegExp(r'[\u0600-\u06FF]').hasMatch(_controller.text);
+    setState(() {
+      _textDirection = isRtl ? TextDirection.rtl : TextDirection.ltr;
+    });
   }
 }

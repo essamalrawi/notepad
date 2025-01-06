@@ -12,7 +12,11 @@ class NoteModel extends HiveObject {
   final String date;
   @HiveField(3)
   bool? isPinned;
+  @HiveField(4)
+  bool? RTL;
+
   NoteModel(
+    this.RTL,
     this.isPinned, {
     required this.title,
     required this.subTitle,
