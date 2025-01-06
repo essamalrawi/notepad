@@ -18,7 +18,7 @@ class HomeView extends StatelessWidget {
           backgroundColor: const Color(0xff703410),
           shape: const CircleBorder(),
           child: IconButton(
-              onPressed: () {
+              onPressed: () async {
                 GoRouter.of(context).push(AppRouter.kCreateNoteView);
               },
               icon: SvgPicture.asset('assets/images/button.svg'))),

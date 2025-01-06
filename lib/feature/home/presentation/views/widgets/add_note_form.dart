@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:notepad/core/utils/app_style.dart';
 import 'package:notepad/feature/home/data/models/note_model.dart';
 import 'package:notepad/feature/home/presentation/manager/add_note/add_note_cubit.dart';
-import 'package:notepad/feature/home/presentation/manager/notes/notes_cubit.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/create_note_header.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/custom_elevated_button.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/note_text_field.dart';
@@ -106,8 +104,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                                       .toString());
                               BlocProvider.of<AddNoteCubit>(context)
                                   .addNote(noteModel);
-                              BlocProvider.of<NotesCubit>(context)
-                                  .fetchAllNotes();
+                              GoRouter.of(context).pop();
                             } else {
                               autovalidateMode = AutovalidateMode.always;
                               setState(() {});

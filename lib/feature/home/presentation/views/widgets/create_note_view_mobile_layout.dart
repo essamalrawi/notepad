@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notepad/feature/home/presentation/manager/add_note/add_note_cubit.dart';
+import 'package:notepad/feature/home/presentation/manager/notes/notes_cubit.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/add_note_form.dart';
 
 class CreateNoteViewMobileLayout extends StatelessWidget {
@@ -19,7 +20,7 @@ class CreateNoteViewMobileLayout extends StatelessWidget {
               log("Failled ${state.error}");
             }
             if (state is AddNoteSuccess) {
-              log("Done added note");
+              BlocProvider.of<NotesCubit>(context).fetchAllNotes();
             }
           },
           builder: (context, state) {
