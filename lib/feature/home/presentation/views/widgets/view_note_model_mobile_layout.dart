@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:notepad/core/utils/app_router.dart';
@@ -18,6 +16,7 @@ class ViewNoteModelMobileLayout extends StatelessWidget {
         children: [
           ViewNoteHeader(
             note: note,
+            isPinned: note.isPinned ?? false,
           ),
           Expanded(
             child: GestureDetector(

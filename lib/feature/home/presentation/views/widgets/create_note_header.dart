@@ -6,8 +6,9 @@ import 'package:notepad/core/utils/app_style.dart';
 class CreateNoteHeader extends StatelessWidget {
   const CreateNoteHeader({
     super.key,
+    this.edit = false,
   });
-
+  final bool? edit;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,7 +29,7 @@ class CreateNoteHeader extends StatelessWidget {
               width: 12,
             ),
             Text(
-              "Create Note",
+              edit == true ? "Edit Note" : "Create Note",
               style: AppStyle.styleBold20(context),
             ),
           ],

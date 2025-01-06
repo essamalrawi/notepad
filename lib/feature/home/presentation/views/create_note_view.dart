@@ -5,7 +5,7 @@ import 'package:notepad/feature/home/presentation/manager/add_note/add_note_cubi
 import 'package:notepad/feature/home/presentation/views/widgets/create_note_view_mobile_layout.dart';
 
 class CreateNoteView extends StatelessWidget {
-  const CreateNoteView({super.key, this.note});
+  const CreateNoteView(this.note, {super.key});
   final NoteModel? note;
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,9 @@ class CreateNoteView extends StatelessWidget {
       body: SafeArea(
           child: BlocProvider(
         create: (context) => AddNoteCubit(),
-        child: const CreateNoteViewMobileLayout(),
+        child: CreateNoteViewMobileLayout(
+          note: note,
+        ),
       )),
     );
   }

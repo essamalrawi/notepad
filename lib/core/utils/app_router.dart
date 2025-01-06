@@ -23,9 +23,9 @@ class AppRouter {
     GoRoute(
       path: kCreateNoteView,
       builder: (context, state) {
-        final note = state.extra as NoteModel;
+        final note = state.extra as NoteModel?;
         return CreateNoteView(
-          note: note,
+          note,
         );
       },
     ),

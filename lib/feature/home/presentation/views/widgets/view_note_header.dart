@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,12 +9,20 @@ import 'package:notepad/core/utils/app_style.dart';
 import 'package:notepad/feature/home/data/models/note_model.dart';
 import 'package:notepad/feature/home/presentation/manager/notes/notes_cubit.dart';
 
-class ViewNoteHeader extends StatelessWidget {
+class ViewNoteHeader extends StatefulWidget {
   const ViewNoteHeader({
     super.key,
     required this.note,
+    required this.isPinned,
   });
   final NoteModel note;
+  final bool isPinned;
+
+  @override
+  State<ViewNoteHeader> createState() => _ViewNoteHeaderState();
+}
+
+class _ViewNoteHeaderState extends State<ViewNoteHeader> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -40,7 +50,7 @@ class ViewNoteHeader extends StatelessWidget {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Text(
-                        note.title,
+                        widget.note.title,
                         maxLines: 1,
                         style: AppStyle.styleBold20(context),
                       ),
@@ -49,7 +59,7 @@ class ViewNoteHeader extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                      note.date,
+                      widget.note.date,
                       style: AppStyle.styleRegular12(context),
                     )
                   ],
@@ -62,18 +72,28 @@ class ViewNoteHeader extends StatelessWidget {
           children: [
             IconButton(
                 onPressed: () {
-                  note.isPinned = true;
-                  note.save();
+                  if (widget.note.isPinned == true) {
+                    widget.note.isPinned = false;
+                  } else {
+                    widget.note.isPinned = true;
+                  }
+
+                  widget.note.save();
                   BlocProvider.of<NotesCubit>(context).fetchAllNotes();
+
+                  setState(() {});
+                  //      setState(() {});
                 },
-                icon: const Icon(
-                  FontAwesomeIcons.mapPin,
+                icon: Icon(
+                  (widget.note.isPinned ?? false)
+                      ? FontAwesomeIcons.thumbtackSlash
+                      : FontAwesomeIcons.thumbtack,
                   color: Colors.black,
                 )),
             IconButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {
-                  note.delete();
+                  widget.note.delete();
                   BlocProvider.of<NotesCubit>(context).fetchAllNotes();
                   GoRouter.of(context).pop();
                 },

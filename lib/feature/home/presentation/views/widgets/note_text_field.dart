@@ -1,13 +1,40 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:notepad/core/utils/app_style.dart';
+import 'package:notepad/feature/home/data/models/note_model.dart';
 
-class NoteTextFormField extends StatelessWidget {
-  const NoteTextFormField({super.key, this.onSaved});
+class NoteTextFormField extends StatefulWidget {
+  const NoteTextFormField({super.key, this.onSaved, this.note});
   final Function(String?)? onSaved;
+  final NoteModel? note;
+  @override
+  State<NoteTextFormField> createState() => _NoteTextFormFieldState();
+}
+
+class _NoteTextFormFieldState extends State<NoteTextFormField> {
+  late TextEditingController _contentController;
+  @override
+  void initState() {
+    super.initState();
+
+    _contentController =
+        TextEditingController(text: widget.note?.subTitle ?? '');
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controllers
+
+    _contentController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onSaved: onSaved,
+      controller: _contentController,
+      onSaved: widget.onSaved,
       validator: (value) {
         if (value?.isEmpty ?? true) {
           return 'Field is required';

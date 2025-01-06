@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:notepad/core/utils/app_style.dart';
 import 'package:notepad/feature/home/data/models/note_model.dart';
 import 'package:notepad/feature/home/presentation/manager/add_note/add_note_cubit.dart';
+import 'package:notepad/feature/home/presentation/manager/notes/notes_cubit.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/create_note_header.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/custom_elevated_button.dart';
 import 'package:notepad/feature/home/presentation/views/widgets/note_text_field.dart';
@@ -13,8 +14,11 @@ import 'package:notepad/feature/home/presentation/views/widgets/title_text_field
 class AddNoteForm extends StatefulWidget {
   const AddNoteForm({
     super.key,
+    this.note,
+    this.edit,
   });
-
+  final NoteModel? note;
+  final bool? edit;
   @override
   State<AddNoteForm> createState() => _AddNoteFormState();
 }
@@ -34,9 +38,9 @@ class _AddNoteFormState extends State<AddNoteForm> {
       autovalidateMode: autovalidateMode,
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 4),
-            child: CreateNoteHeader(),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: CreateNoteHeader(edit: widget.note != null ? true : false),
           ),
           const SizedBox(
             height: 45,
@@ -51,6 +55,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TitleFormTextField(
+                      note: widget.note,
                       onSaved: (value) {
                         title = value;
                       },
@@ -67,9 +72,11 @@ class _AddNoteFormState extends State<AddNoteForm> {
                     const SizedBox(
                       height: 24,
                     ),
-                    NoteTextFormField(onSaved: (value) {
-                      subTitle = value;
-                    }),
+                    NoteTextFormField(
+                        note: widget.note,
+                        onSaved: (value) {
+                          subTitle = value;
+                        }),
                   ],
                 ),
               ),
@@ -96,14 +103,24 @@ class _AddNoteFormState extends State<AddNoteForm> {
                           onPressed: () {
                             if (fromKey.currentState!.validate()) {
                               fromKey.currentState!.save();
-                              var noteModel = NoteModel(false,
-                                  title: title!,
-                                  subTitle: subTitle!,
-                                  date: DateFormat('dd/MM/yyyy')
-                                      .format(DateTime.now())
-                                      .toString());
-                              BlocProvider.of<AddNoteCubit>(context)
-                                  .addNote(noteModel);
+
+                              if (widget.note != null) {
+                                widget.note!.save();
+                                widget.note!.title = title!;
+                                widget.note!.subTitle = subTitle!;
+                                BlocProvider.of<NotesCubit>(context)
+                                    .fetchAllNotes();
+                              } else {
+                                var noteModel = NoteModel(false,
+                                    title: title!,
+                                    subTitle: subTitle!,
+                                    date: DateFormat('dd/MM/yyyy')
+                                        .format(DateTime.now())
+                                        .toString());
+                                BlocProvider.of<AddNoteCubit>(context)
+                                    .addNote(noteModel);
+                              }
+
                               GoRouter.of(context).pop();
                             } else {
                               autovalidateMode = AutovalidateMode.always;
